@@ -10,11 +10,11 @@ import (
 
 func main() {
 	mgr := gate.New(exchangeapi.ApiKey{
-		Key: "",
+		Key:    "",
 		Secret: "",
 	})
-	result,err := mgr.SetOrder(order.Parameters{
-		Assets:   symbol.Assets{
+	result, err := mgr.SetOrder(order.Parameters{
+		Assets: symbol.Assets{
 			Base:  "ETH",
 			Quote: "USDT"},
 		Side:     order.Buy,
@@ -23,14 +23,12 @@ func main() {
 		Price:    1000,
 	})
 	fmt.Println(result)
-	//price, err := mgr.GetCurrentPrice(symbol.Assets{
-	//	Base:  "ETH",
-	//	Quote: "USDT",
-	//})
-	//fmt.Println(price)
-	//body := url.Values{}
-	//body.Set(pnames.Symbol, fmt.Sprint("Etg", "dsds"))
-	//body.Set(pnames.Side, "buy")
+	price, err := mgr.GetCurrentPrice(symbol.Assets{
+		Base:  "ETH",
+		Quote: "USDT",
+	})
+	fmt.Println(price)
+
 	if err != nil {
 		panic(err.Error())
 	}

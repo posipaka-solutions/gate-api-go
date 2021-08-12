@@ -7,7 +7,8 @@ import (
 	"io/ioutil"
 	"net/http"
 )
-const(
+
+const (
 	label   = "label"
 	message = "message"
 )
@@ -25,15 +26,15 @@ func getResponseBody(response *http.Response) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	//if respondBody[0] == '[' && respondBody[len(respondBody)-1] == ']' && respondBody[1] != '[' {
-	//	var body []map[string]interface{}
-	//	err = json.Unmarshal(respondBody, &body)
-	//	if err != nil {
-	//		return nil, err
-	//	}
-	//
-	//	return body, err
-	//}
+	if respondBody[0] == '[' && respondBody[len(respondBody)-1] == ']' && respondBody[1] != '[' {
+		var body []map[string]interface{}
+		err = json.Unmarshal(respondBody, &body)
+		if err != nil {
+			return nil, err
+		}
+
+		return body, err
+	}
 
 	var body map[string]interface{}
 	err = json.Unmarshal(respondBody, &body)
@@ -42,14 +43,14 @@ func getResponseBody(response *http.Response) (interface{}, error) {
 	}
 
 	if response.StatusCode/100 != 2 {
-		return nil, parseGateError(body,response)
+		return nil, parseGateError(body, response)
 	}
 
-	return body,nil
+	return body, nil
 
 }
 
-func parseGateError(body map[string]interface{}, response *http.Response, ) error {
+func parseGateError(body map[string]interface{}, response *http.Response) error {
 
 	message, isOkay := body[message].(string)
 	if !isOkay {
@@ -62,4 +63,3 @@ func parseGateError(body map[string]interface{}, response *http.Response, ) erro
 		Message: message,
 	}
 }
-
