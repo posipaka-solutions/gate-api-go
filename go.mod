@@ -1,4 +1,4 @@
-module gate-api-go
+module github.com/posipaka-trade/gate-api-go
 
 go 1.16
 
