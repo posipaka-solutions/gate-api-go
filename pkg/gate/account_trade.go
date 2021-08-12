@@ -5,19 +5,22 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"gate-api-go/internal/gaterequest"
-	"gate-api-go/internal/gateresponse"
-	"gate-api-go/internal/pnames"
+	"github.com/posipaka-trade/gate-api-go/internal/gaterequest"
+	"github.com/posipaka-trade/gate-api-go/internal/gateresponse"
+	"github.com/posipaka-trade/gate-api-go/internal/pnames"
+	"github.com/posipaka-trade/posipaka-trade-cmn/exchangeapi/symbol"
+	"time"
+
 	"github.com/posipaka-trade/posipaka-trade-cmn/exchangeapi/order"
 	"net/http"
 )
 
 func (manager *ExchangeManager) SetOrder(parameters order.Parameters) (float64, error) {
-	bodyJson,err := manager.createOrderRequestBody(&parameters)
-	if err != nil{
+	bodyJson, err := manager.createOrderRequestBody(&parameters)
+	if err != nil {
 		return 0, err
 	}
-	req,err := http.NewRequest(http.MethodPost, baseUrl+prefix+newOrderEndpoint,bytes.NewBuffer(bodyJson))
+	req, err := http.NewRequest(http.MethodPost, baseUrl+prefix+newOrderEndpoint, bytes.NewBuffer(bodyJson))
 
 	gaterequest.SetHeader(req)
 
@@ -27,7 +30,7 @@ func (manager *ExchangeManager) SetOrder(parameters order.Parameters) (float64, 
 		EndPoint: newOrderEndpoint,
 		Body:     bodyJson,
 		Api:      manager.apiKey,
-	},req)
+	}, req)
 
 	response, err := manager.client.Do(req)
 	if err != nil {
@@ -41,16 +44,29 @@ func (manager *ExchangeManager) SetOrder(parameters order.Parameters) (float64, 
 
 func (manager *ExchangeManager) createOrderRequestBody(params *order.Parameters) ([]byte, error) {
 	body := make(map[string]interface{})
-	body[pnames.Symbol] = fmt.Sprintf("%s_%s", params.Assets.Base,params.Assets.Quote)
-	body[pnames.Type] 	= orderTypeAlias[params.Type]
-	body[pnames.Side]   = orderSideAlias[params.Side]
+	body[pnames.Symbol] = fmt.Sprintf("%s_%s", params.Assets.Base, params.Assets.Quote)
+	body[pnames.Type] = orderTypeAlias[params.Type]
+	body[pnames.Side] = orderSideAlias[params.Side]
 	body[pnames.Amount] = fmt.Sprint(params.Quantity)
-	body[pnames.Price]  = fmt.Sprint(params.Price)
+	body[pnames.Price] = fmt.Sprint(params.Price)
 
-	bodyJson,err := json.Marshal(body)
-	if err != nil{
+	bodyJson, err := json.Marshal(body)
+	if err != nil {
 		return nil, errors.New("[gate] -> Error when marshal body to bodyJson in createOrderRequestBody")
 	}
 
-	return bodyJson,nil
+	return bodyJson, nil
+}
+func (manager *ExchangeManager) GetServerTime() (time.Time, error) {
+	return time.Time{}, nil
+}
+func (manager *ExchangeManager) GetOrdersList(assets symbol.Assets) ([]order.Info, error) {
+	return nil, nil
+}
+func (manager *ExchangeManager) GetSymbolLimits(assets symbol.Assets) (symbol.Limits, error) {
+	return symbol.Limits{}, nil
+
+}
+func (manager *ExchangeManager) AddLimits(limits symbol.Limits) {
+
 }

@@ -2,7 +2,7 @@ package gateresponse
 
 import (
 	"errors"
-	"gate-api-go/internal/pnames"
+	"github.com/posipaka-trade/gate-api-go/internal/pnames"
 	"net/http"
 	"strconv"
 )
@@ -20,13 +20,13 @@ func GetCurrentPriceParser(response *http.Response) (float64, error) {
 
 	//priceI,isOk :=
 
-	priceStr,isOk := bodyI[pnames.Last].(string)
-	if isOk != true{
+	priceStr, isOk := bodyI[pnames.Last].(string)
+	if isOk != true {
 		return 0, errors.New("[gateresponse] -> Error when casting priceI to priceStr in GetCurrentPriceParser")
 	}
 
-	price, err := strconv.ParseFloat(priceStr,64)
-	if err != nil{
+	price, err := strconv.ParseFloat(priceStr, 64)
+	if err != nil {
 		return 0, errors.New("[gateresponse] -> Error when parsing priceArr to price GetCurrentPriceParser")
 	}
 

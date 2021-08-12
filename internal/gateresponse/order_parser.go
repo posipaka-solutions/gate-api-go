@@ -2,7 +2,7 @@ package gateresponse
 
 import (
 	"errors"
-	"gate-api-go/internal/pnames"
+	"github.com/posipaka-trade/gate-api-go/internal/pnames"
 	"net/http"
 )
 
@@ -15,12 +15,12 @@ func ParseSetOrder(response *http.Response) (float64, error) {
 	if !isOk {
 		return 0, errors.New("[gateresponse] -> Error when casting bodyI to body in ParseSetOrder")
 	}
-	status,isOk := body[pnames.Status].(string)
+	status, isOk := body[pnames.Status].(string)
 	if !isOk {
 		return 0, errors.New("[gateresponse] -> Error when casting body to status in ParseSetOrder")
 	}
-	if status == pnames.Open{
+	if status == pnames.Open {
 		return 1, nil
 	}
-	return 0,  errors.New("[gateresponse] -> Error when placing order in ParseSetOrder")
+	return 0, errors.New("[gateresponse] -> Error when placing order in ParseSetOrder")
 }

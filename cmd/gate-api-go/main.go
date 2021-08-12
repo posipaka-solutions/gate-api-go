@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"gate-api-go/pkg/gate"
+	"github.com/posipaka-trade/gate-api-go/pkg/gate"
 	"github.com/posipaka-trade/posipaka-trade-cmn/exchangeapi"
 	"github.com/posipaka-trade/posipaka-trade-cmn/exchangeapi/order"
 	"github.com/posipaka-trade/posipaka-trade-cmn/exchangeapi/symbol"

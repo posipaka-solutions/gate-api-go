@@ -5,18 +5,19 @@ import (
 	"crypto/sha512"
 	"encoding/hex"
 	"fmt"
-	"gate-api-go/internal/pnames"
+	"github.com/posipaka-trade/gate-api-go/internal/pnames"
 	"github.com/posipaka-trade/posipaka-trade-cmn/exchangeapi"
 	"net/http"
 	"strconv"
 	"time"
 )
+
 type SignStruct struct {
-	Method string
-	Prefix string
+	Method   string
+	Prefix   string
 	EndPoint string
-	Body []byte
-	Api exchangeapi.ApiKey
+	Body     []byte
+	Api      exchangeapi.ApiKey
 }
 
 func SetHeader(req *http.Request) {
@@ -25,7 +26,7 @@ func SetHeader(req *http.Request) {
 
 }
 
-func MakeSign(signStruct SignStruct,req *http.Request){
+func MakeSign(signStruct SignStruct, req *http.Request) {
 	h := sha512.New()
 	h.Write(signStruct.Body)
 	hashedPayload := hex.EncodeToString(h.Sum(nil))
@@ -33,7 +34,7 @@ func MakeSign(signStruct SignStruct,req *http.Request){
 	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
 	timestampStr := fmt.Sprint(timestamp)
 
-	whatToSign := fmt.Sprintf("%s\n%s\n%s\n%s\n%s",signStruct.Method,
+	whatToSign := fmt.Sprintf("%s\n%s\n%s\n%s\n%s", signStruct.Method,
 		signStruct.Prefix+signStruct.EndPoint,
 		"",
 		hashedPayload,
