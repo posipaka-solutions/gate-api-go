@@ -20,7 +20,7 @@ func main() {
 		Side:     order.Buy,
 		Type:     order.Limit,
 		Quantity: 0.001,
-		Price:    1000,
+		Price:    3300,
 	})
 	fmt.Println(result)
 	price, err := mgr.GetCurrentPrice(symbol.Assets{
