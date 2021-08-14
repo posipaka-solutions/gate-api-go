@@ -70,3 +70,7 @@ func (manager *ExchangeManager) GetSymbolLimits(assets symbol.Assets) (symbol.Li
 func (manager *ExchangeManager) AddLimits(limits symbol.Limits) {
 
 }
+
+func (manager *ExchangeManager) GetAssetBalance(asset string) (float64, error) {
+	return 0, nil
+}
