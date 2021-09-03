@@ -14,13 +14,13 @@ const (
 )
 
 func getResponseBody(response *http.Response) (interface{}, error) {
-	//if response.StatusCode/100 != 2 && response.Body == nil {
-	//	return nil, &exchangeapi.ExchangeError{
-	//		Type:    exchangeapi.HttpErr,
-	//		Code:    response.StatusCode,
-	//		Message: response.Status,
-	//	}
-	//}
+	if response.StatusCode/100 != 2 && response.Body == nil {
+		return nil, &exchangeapi.ExchangeError{
+			Type:    exchangeapi.HttpErr,
+			Code:    response.StatusCode,
+			Message: response.Status,
+		}
+	}
 
 	respondBody, err := ioutil.ReadAll(response.Body)
 	if err != nil {

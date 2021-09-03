@@ -18,8 +18,6 @@ func GetCurrentPriceParser(response *http.Response) (float64, error) {
 	}
 	bodyI := bodyIArr[0]
 
-	//priceI,isOk :=
-
 	priceStr, isOk := bodyI[pnames.Last].(string)
 	if isOk != true {
 		return 0, errors.New("[gateresponse] -> Error when casting priceI to priceStr in GetCurrentPriceParser")
