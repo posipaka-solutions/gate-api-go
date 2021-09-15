@@ -63,7 +63,7 @@ func (manager *ExchangeManager) GetServerTime() (time.Time, error) {
 func (manager *ExchangeManager) GetOrdersList(assets symbol.Assets) ([]order.Info, error) {
 	return nil, nil
 }
-func (manager *ExchangeManager) GetSymbolsLimits(assets symbol.Assets) ([]symbol.Limits, error) {
+func (manager *ExchangeManager) GetSymbolsLimits() ([]symbol.Limits, error) {
 	return nil, nil
 }
 func (manager *ExchangeManager) GetAssetBalance(asset string) (float64, error) {
