@@ -13,11 +13,12 @@ import (
 )
 
 type SignStruct struct {
-	Method   string
-	Prefix   string
-	EndPoint string
-	Body     []byte
-	Api      exchangeapi.ApiKey
+	Method     string
+	Prefix     string
+	EndPoint   string
+	Body       []byte
+	QueryParam string
+	Api        exchangeapi.ApiKey
 }
 
 func SetHeader(req *http.Request) {
@@ -36,7 +37,7 @@ func MakeSign(signStruct SignStruct, req *http.Request) {
 
 	whatToSign := fmt.Sprintf("%s\n%s\n%s\n%s\n%s", signStruct.Method,
 		signStruct.Prefix+signStruct.EndPoint,
-		"",
+		signStruct.QueryParam,
 		hashedPayload,
 		timestampStr)
 	hash := hmac.New(sha512.New, []byte(signStruct.Api.Secret))

@@ -67,7 +67,25 @@ func (manager *ExchangeManager) GetSymbolsLimits() ([]symbol.Limits, error) {
 	return nil, nil
 }
 func (manager *ExchangeManager) GetAssetBalance(asset string) (float64, error) {
-	return 0, nil
+	queryParam := fmt.Sprintf("%s=%s", pnames.Currency, asset)
+	params := fmt.Sprintf("%s%s%s?%s", baseUrl, prefix, balancesEndpoint, queryParam)
+	req, err := http.NewRequest(http.MethodGet, params, nil)
+	gaterequest.SetHeader(req)
+
+	gaterequest.MakeSign(gaterequest.SignStruct{
+		Method:     http.MethodGet,
+		Prefix:     prefix,
+		EndPoint:   balancesEndpoint,
+		Api:        manager.apiKey,
+		QueryParam: queryParam,
+	}, req)
+
+	response, err := manager.client.Do(req)
+	if err != nil {
+		return 0, err
+	}
+	defer gateresponse.CloseBody(response)
+	return gateresponse.GetAssetBalanceParser(response)
 }
 func (manager ExchangeManager) StoreSymbolsLimits(limits []symbol.Limits) {
 }

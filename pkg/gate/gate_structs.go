@@ -35,8 +35,5 @@ const (
 	prefix           = "/api/v4"
 	newOrderEndpoint = "/spot/orders"
 	getPriceEndpoint = "/spot/tickers"
-
+	balancesEndpoint = "/spot/accounts"
 )
-
-
-
