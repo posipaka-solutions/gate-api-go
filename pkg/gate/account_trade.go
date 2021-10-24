@@ -15,10 +15,10 @@ import (
 	"net/http"
 )
 
-func (manager *ExchangeManager) SetOrder(parameters order.Parameters) (float64, error) {
+func (manager *ExchangeManager) SetOrder(parameters order.Parameters) (order.OrderInfo, error) {
 	bodyJson, err := manager.createOrderRequestBody(&parameters)
 	if err != nil {
-		return 0, err
+		return order.OrderInfo{}, err
 	}
 	req, err := http.NewRequest(http.MethodPost, baseUrl+prefix+newOrderEndpoint, bytes.NewBuffer(bodyJson))
 
@@ -34,7 +34,7 @@ func (manager *ExchangeManager) SetOrder(parameters order.Parameters) (float64, 
 
 	response, err := manager.client.Do(req)
 	if err != nil {
-		return 0, err
+		return order.OrderInfo{}, err
 	}
 
 	defer gateresponse.CloseBody(response)
@@ -70,6 +70,9 @@ func (manager *ExchangeManager) GetAssetBalance(asset string) (float64, error) {
 	queryParam := fmt.Sprintf("%s=%s", pnames.Currency, asset)
 	params := fmt.Sprintf("%s%s%s?%s", baseUrl, prefix, balancesEndpoint, queryParam)
 	req, err := http.NewRequest(http.MethodGet, params, nil)
+	if err != nil {
+		return 0, err
+	}
 	gaterequest.SetHeader(req)
 
 	gaterequest.MakeSign(gaterequest.SignStruct{
@@ -92,3 +95,25 @@ func (manager ExchangeManager) StoreSymbolsLimits(limits []symbol.Limits) {
 func (manager *ExchangeManager) GetSymbolsList() []symbol.Assets {
 	return nil
 }
+
+//func (manager *ExchangeManager) GetOrder(id int)(order.OrderInfo,error){
+//	params := fmt.Sprint(baseUrl,prefix,newOrderEndpoint,"/",id)
+//	req, err := http.NewRequest(http.MethodGet,params,nil)
+//	if err != nil{
+//		return order.OrderInfo{}, err
+//	}
+//	gaterequest.SetHeader(req)
+//
+//	gaterequest.MakeSign(gaterequest.SignStruct{
+//		Method:     http.MethodGet,
+//		Prefix:     prefix,
+//		EndPoint:   fmt.Sprint(newOrderEndpoint,"/",id),
+//		Api:        manager.apiKey,
+//	}, req)
+//	response, err := manager.client.Do(req)
+//	if err != nil {
+//		return order.OrderInfo{}, err
+//	}
+//	defer gateresponse.CloseBody(response)
+//	return gateresponse.GetOrderParser(response)
+//}

@@ -3,36 +3,35 @@ package gateresponse
 import (
 	"errors"
 	"github.com/posipaka-trade/gate-api-go/internal/pnames"
+	"github.com/posipaka-trade/posipaka-trade-cmn/exchangeapi/order"
 	"net/http"
 	"strconv"
 )
 
-func ParseSetOrder(response *http.Response) (float64, error) {
+func ParseSetOrder(response *http.Response) (order.OrderInfo, error) {
 	bodyI, err := getResponseBody(response)
 	if err != nil {
-		return 0, err
+		return order.OrderInfo{}, err
 	}
-	body, isOk := bodyI.(map[string]interface{})
-	if !isOk {
-		return 0, errors.New("[gateresponse] -> Error when casting bodyI to body in ParseSetOrder")
+	body, isOkay := bodyI.(map[string]interface{})
+	if !isOkay {
+		return order.OrderInfo{}, errors.New("[gateresponse] -> Error when casting bodyI to body in ParseSetOrder")
 	}
-	status, isOk := body[pnames.Status].(string)
-	if !isOk {
-		return 0, errors.New("[gateresponse] -> Error when casting body to status in ParseSetOrder")
+	var orderInfo order.OrderInfo
+	cryptoAmountStr, isOkay := body[pnames.Amount].(string)
+	if isOkay != true {
+		return order.OrderInfo{}, errors.New("[gateresponse] -> Error when parsing amount to string")
 	}
-	idStr, isOk := body[pnames.Id].(string)
-	if !isOk {
-		return 0, errors.New("[gateresponse] -> Error when casting body to id in ParseSetOrder")
-	}
-	id, err := strconv.Atoi(idStr)
+	orderInfo.Quantity, err = strconv.ParseFloat(cryptoAmountStr, 64)
 	if err != nil {
-		return 0, errors.New("[gateresponse] -> Error when parsing idStr to id in ParseSetOrder")
+		return order.OrderInfo{}, err
 	}
-	if status == pnames.Open {
-		return 1, nil
-	} else if id != 0 {
-		return 1, nil
+	usdtAmountStr, isOkay := body[pnames.FilledTotal].(string)
+	if isOkay != true {
+		return order.OrderInfo{}, errors.New("[gateresponse] -> Error when parsing filled_total to string")
 	}
+	usdtAmount, err := strconv.ParseFloat(usdtAmountStr, 64)
+	orderInfo.Price = usdtAmount / orderInfo.Quantity
 
-	return 0, errors.New("[gateresponse] -> Error when placing order in ParseSetOrder")
+	return orderInfo, nil
 }
