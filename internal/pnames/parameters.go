@@ -13,6 +13,7 @@ const (
 	Currency    = "currency"
 	Available   = "available"
 	FilledTotal = "filled_total"
+	Fee         = "fee"
 )
 const (
 	Key         = "KEY"

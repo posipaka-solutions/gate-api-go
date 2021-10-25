@@ -30,8 +30,18 @@ func ParseSetOrder(response *http.Response) (order.OrderInfo, error) {
 	if isOkay != true {
 		return order.OrderInfo{}, errors.New("[gateresponse] -> Error when parsing filled_total to string")
 	}
+	feeStr, isOkay := body[pnames.Fee].(string)
+	if isOkay != true {
+		return order.OrderInfo{}, errors.New("[gateresponse] -> Error when parsing fee to string")
+	}
+	fee, err := strconv.ParseFloat(feeStr, 64)
+	if err != nil {
+		return order.OrderInfo{}, err
+	}
+
 	usdtAmount, err := strconv.ParseFloat(usdtAmountStr, 64)
 	orderInfo.Price = usdtAmount / orderInfo.Quantity
+	orderInfo.Quantity = orderInfo.Quantity - fee
 
 	return orderInfo, nil
 }
