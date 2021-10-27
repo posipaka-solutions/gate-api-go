@@ -40,8 +40,8 @@ func ParseSetOrder(response *http.Response) (order.OrderInfo, error) {
 	}
 
 	usdtAmount, err := strconv.ParseFloat(usdtAmountStr, 64)
-	orderInfo.Price = usdtAmount / orderInfo.Quantity
 	orderInfo.Quantity = orderInfo.Quantity - fee
+	orderInfo.Price = usdtAmount / orderInfo.Quantity
 
 	return orderInfo, nil
 }
