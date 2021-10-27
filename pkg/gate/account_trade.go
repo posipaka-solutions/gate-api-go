@@ -9,6 +9,7 @@ import (
 	"github.com/posipaka-trade/gate-api-go/internal/gateresponse"
 	"github.com/posipaka-trade/gate-api-go/internal/pnames"
 	"github.com/posipaka-trade/posipaka-trade-cmn/exchangeapi/symbol"
+	"strconv"
 	"time"
 
 	"github.com/posipaka-trade/posipaka-trade-cmn/exchangeapi/order"
@@ -47,9 +48,8 @@ func (manager *ExchangeManager) createOrderRequestBody(params *order.Parameters)
 	body[pnames.Symbol] = fmt.Sprintf("%s_%s", params.Assets.Base, params.Assets.Quote)
 	body[pnames.Type] = orderTypeAlias[params.Type]
 	body[pnames.Side] = orderSideAlias[params.Side]
-	body[pnames.Amount] = fmt.Sprint(params.Quantity)
-	body[pnames.Price] = fmt.Sprint(params.Price)
-
+	body[pnames.Amount] = strconv.FormatFloat(params.Quantity, 'f', -1, 64)
+	body[pnames.Price] = strconv.FormatFloat(params.Price, 'f', -1, 64)
 	bodyJson, err := json.Marshal(body)
 	if err != nil {
 		return nil, errors.New("[gate] -> Error when marshal body to bodyJson in createOrderRequestBody")
