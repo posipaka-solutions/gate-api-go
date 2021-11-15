@@ -24,7 +24,6 @@ func (manager *ExchangeManager) SetOrder(parameters order.Parameters) (order.Inf
 	req, err := http.NewRequest(http.MethodPost, baseUrl+prefix+newOrderEndpoint, bytes.NewBuffer(bodyJson))
 
 	gaterequest.SetHeader(req)
-
 	gaterequest.MakeSign(gaterequest.SignStruct{
 		Method:   http.MethodPost,
 		Prefix:   prefix,
@@ -40,7 +39,6 @@ func (manager *ExchangeManager) SetOrder(parameters order.Parameters) (order.Inf
 
 	defer gateresponse.CloseBody(response)
 	return gateresponse.ParseOrderInformation(response)
-
 }
 
 func (manager *ExchangeManager) createOrderRequestBody(params *order.Parameters) ([]byte, error) {
@@ -65,8 +63,8 @@ func (manager *ExchangeManager) GetAssetBalance(asset string) (float64, error) {
 	if err != nil {
 		return 0, err
 	}
-	gaterequest.SetHeader(req)
 
+	gaterequest.SetHeader(req)
 	gaterequest.MakeSign(gaterequest.SignStruct{
 		Method:     http.MethodGet,
 		Prefix:     prefix,
@@ -87,25 +85,27 @@ func (manager *ExchangeManager) GetOrderInfo(orderId string) (order.Info, error)
 	params := fmt.Sprint(baseUrl, prefix, newOrderEndpoint, "/", orderId)
 	req, err := http.NewRequest(http.MethodGet, params, nil)
 	if err != nil {
-		return order.OrderInfo{}, err
+		return order.Info{}, err
 	}
-	gaterequest.SetHeader(req)
 
+	gaterequest.SetHeader(req)
 	gaterequest.MakeSign(gaterequest.SignStruct{
 		Method:   http.MethodGet,
 		Prefix:   prefix,
-		EndPoint: fmt.Sprint(newOrderEndpoint, "/", id),
+		EndPoint: fmt.Sprint(newOrderEndpoint, "/", orderId),
 		Api:      manager.apiKey,
 	}, req)
+
 	response, err := manager.client.Do(req)
 	if err != nil {
-		return order.OrderInfo{}, err
+		return order.Info{}, err
 	}
+
 	defer gateresponse.CloseBody(response)
-	return gateresponse.GetOrderParser(response)
+	return gateresponse.ParseOrderInformation(response)
 }
 
-func (manager *ExchangeManager) StoreSymbolsLimits(limits []symbol.Limits) {
+func (manager *ExchangeManager) StoreSymbolsLimits([]symbol.Limits) {
 }
 func (manager *ExchangeManager) GetSymbolsList() []symbol.Assets {
 	return nil
@@ -113,7 +113,7 @@ func (manager *ExchangeManager) GetSymbolsList() []symbol.Assets {
 func (manager *ExchangeManager) GetServerTime() (time.Time, error) {
 	return time.Time{}, nil
 }
-func (manager *ExchangeManager) GetOrdersList(assets symbol.Assets) ([]order.Info, error) {
+func (manager *ExchangeManager) GetOrdersList(symbol.Assets) ([]order.Info, error) {
 	return nil, nil
 }
 func (manager *ExchangeManager) GetSymbolsLimits() ([]symbol.Limits, error) {
