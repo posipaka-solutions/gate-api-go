@@ -24,7 +24,6 @@ type SignStruct struct {
 func SetHeader(req *http.Request) {
 	req.Header.Set(pnames.Accept, "application/json")
 	req.Header.Set(pnames.ContentType, "application/json")
-
 }
 
 func MakeSign(signStruct SignStruct, req *http.Request) {
