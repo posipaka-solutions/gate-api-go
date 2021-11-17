@@ -3,19 +3,12 @@ package gateresponse
 import (
 	"errors"
 	"github.com/posipaka-trade/gate-api-go/internal/pnames"
+	"github.com/posipaka-trade/gate-api-go/pkg/gate/trade"
 	"net/http"
 	"strconv"
 )
 
-type MarketTrades struct {
-	Id         int
-	CreateTime float64
-	Side       string
-	Amount     float64
-	Price      float64
-}
-
-func ParseMarketTrades(response *http.Response) ([]MarketTrades, error) {
+func ParseMarketTrades(response *http.Response) ([]trade.MarketTrades, error) {
 	bodyI, err := getResponseBody(response)
 	if err != nil {
 		return nil, err
@@ -28,8 +21,8 @@ func ParseMarketTrades(response *http.Response) ([]MarketTrades, error) {
 	return structureMarketTrades(body)
 }
 
-func structureMarketTrades(body []map[string]interface{}) ([]MarketTrades, error) {
-	marketTrades := make([]MarketTrades, len(body))
+func structureMarketTrades(body []map[string]interface{}) ([]trade.MarketTrades, error) {
+	marketTrades := make([]trade.MarketTrades, len(body))
 	var err error
 
 	for i := 0; i < len(body); i++ {
