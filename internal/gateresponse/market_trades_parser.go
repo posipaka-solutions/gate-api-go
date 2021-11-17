@@ -4,8 +4,10 @@ import (
 	"errors"
 	"github.com/posipaka-trade/gate-api-go/internal/pnames"
 	"github.com/posipaka-trade/gate-api-go/pkg/gate/trade"
+	"github.com/posipaka-trade/posipaka-trade-cmn/exchangeapi/order"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func ParseMarketTrades(response *http.Response) ([]trade.MarketTrades, error) {
@@ -31,20 +33,21 @@ func structureMarketTrades(body []map[string]interface{}) ([]trade.MarketTrades,
 			return nil, errors.New("[gateresponse] -> error when casting market trades id")
 		}
 		marketTrades[i].Id, err = strconv.Atoi(id)
+		if err != nil {
+			return nil, errors.New("[gateresponse] -> error when parsing id to int")
+		}
 
-		createTimeStr, isOk := body[i][pnames.CreateTimeMs].(string)
+		createTimeStr, isOk := body[i][pnames.CreateTime].(string)
 		if isOk != true {
 			return nil, errors.New("[gateresponse] -> error when casting market trades create_time_ms")
 		}
-		marketTrades[i].CreateTime, err = strconv.ParseFloat(createTimeStr, 64)
+		createTime, err := strconv.ParseInt(createTimeStr, 10, 64)
 		if err != nil {
-			return nil, errors.New("[gateresponse] -> error when parsing create_time_ms to float64")
+			return nil, errors.New("[gateresponse] -> error when parsing create_time to int64")
 		}
+		marketTrades[i].CreateTime = time.Unix(createTime, 0)
 
-		marketTrades[i].Side, isOk = body[i][pnames.Side].(string)
-		if isOk != true {
-			return nil, errors.New("[gateresponse] -> error when casting market trades side")
-		}
+		marketTrades[i].Side, err = getOrderSide(body[i])
 
 		amountStr, isOk := body[i][pnames.Amount].(string)
 		if isOk != true {
@@ -65,4 +68,20 @@ func structureMarketTrades(body []map[string]interface{}) ([]trade.MarketTrades,
 		}
 	}
 	return marketTrades, nil
+}
+
+func getOrderSide(body map[string]interface{}) (order.Side, error) {
+	sideStr, isOkay := body[pnames.Side].(string)
+	if !isOkay {
+		return order.OtherSide, errors.New("[gateresponse] -> error when casting market side to string")
+	}
+
+	switch sideStr {
+	case "buy":
+		return order.Buy, nil
+	case "sell":
+		return order.Sell, nil
+	default:
+		return order.OtherSide, nil
+	}
 }
