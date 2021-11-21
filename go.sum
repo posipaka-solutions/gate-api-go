@@ -1,6 +1,6 @@
 github.com/golang/mock v1.6.0/go.mod h1:p6yTPP+5HYm5mzsMV8JkE6ZKdX+/wYM6Hr+LicevLPs=
-github.com/posipaka-trade/posipaka-trade-cmn v0.0.0-20211024134539-c63e65debb04 h1:7WrFAvoxp9EQvFpP5xA1tTu7fQS00LzN5Or8WGbKChI=
-github.com/posipaka-trade/posipaka-trade-cmn v0.0.0-20211024134539-c63e65debb04/go.mod h1:0GcgO7G+PXQ6PfTX4VVa6KGm9fWp0d1eLrZp7rz8SHY=
+github.com/posipaka-trade/posipaka-trade-cmn v0.0.0-20211116225215-f0304a42a38e h1:80k9VndNQsELWcsUrO+CbE7qyI1qq3GqYRN+LVZso7c=
+github.com/posipaka-trade/posipaka-trade-cmn v0.0.0-20211116225215-f0304a42a38e/go.mod h1:0GcgO7G+PXQ6PfTX4VVa6KGm9fWp0d1eLrZp7rz8SHY=
 github.com/yuin/goldmark v1.3.5/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1Zlc8k=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550/go.mod h1:yigFU9vqHzYiE8UmvKecakEJjdnWj3jj499lnFckfCI=

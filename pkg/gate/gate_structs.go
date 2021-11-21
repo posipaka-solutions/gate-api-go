@@ -61,4 +61,6 @@ const (
 	newOrderEndpoint = "/spot/orders"
 	getPriceEndpoint = "/spot/tickers"
 	balancesEndpoint = "/spot/accounts"
+	getMarketTrades  = "/spot/trades"
+	getOrderBook     = "/spot/order_book"
 )

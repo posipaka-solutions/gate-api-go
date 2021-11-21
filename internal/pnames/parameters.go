@@ -14,6 +14,9 @@ const (
 	Available   = "available"
 	FilledTotal = "filled_total"
 	Fee         = "fee"
+	CreateTime  = "create_time"
+	Asks        = "asks"
+	Bids        = "bids"
 )
 const (
 	Key         = "KEY"
