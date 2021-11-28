@@ -81,8 +81,10 @@ func (manager *ExchangeManager) GetAssetBalance(asset string) (float64, error) {
 	return gateresponse.GetAssetBalanceParser(response)
 }
 
-func (manager *ExchangeManager) GetOrderInfo(orderId string) (order.Info, error) {
-	params := fmt.Sprint(baseUrl, prefix, newOrderEndpoint, "/", orderId)
+func (manager *ExchangeManager) GetOrderInfo(orderId string, symbol symbol.Assets) (order.Info, error) {
+	queryParam := fmt.Sprintf("currency_pair=%s_%s", symbol.Base, symbol.Quote)
+	params := fmt.Sprint(baseUrl, prefix, newOrderEndpoint, "/", orderId, "?", queryParam)
+
 	req, err := http.NewRequest(http.MethodGet, params, nil)
 	if err != nil {
 		return order.Info{}, err
@@ -90,10 +92,11 @@ func (manager *ExchangeManager) GetOrderInfo(orderId string) (order.Info, error)
 
 	gaterequest.SetHeader(req)
 	gaterequest.MakeSign(gaterequest.SignStruct{
-		Method:   http.MethodGet,
-		Prefix:   prefix,
-		EndPoint: fmt.Sprint(newOrderEndpoint, "/", orderId),
-		Api:      manager.apiKey,
+		Method:     http.MethodGet,
+		Prefix:     prefix,
+		QueryParam: queryParam,
+		EndPoint:   fmt.Sprint(newOrderEndpoint, "/", orderId),
+		Api:        manager.apiKey,
 	}, req)
 
 	response, err := manager.client.Do(req)
