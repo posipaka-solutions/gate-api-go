@@ -51,7 +51,6 @@ func getResponseBody(response *http.Response) (interface{}, error) {
 }
 
 func parseGateError(body map[string]interface{}, response *http.Response) error {
-
 	message, isOkay := body[message].(string)
 	if !isOkay {
 		return errors.New("[gateresponse] -> failed to parse binance error message")

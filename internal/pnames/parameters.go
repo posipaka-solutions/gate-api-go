@@ -1,19 +1,19 @@
 package pnames
 
 const (
-	Symbol      = "currency_pair"
-	Side        = "side"
-	Type        = "type"
-	Amount      = "amount"
-	Price       = "price"
-	Last        = "last"
-	Status      = "status"
-	Open        = "open"
-	Id          = "id"
-	Currency    = "currency"
-	Available   = "available"
-	FilledTotal = "filled_total"
-	Fee         = "fee"
+	Id           = "id"
+	Side         = "side"
+	Type         = "type"
+	Amount       = "amount"
+	Price        = "price"
+	Last         = "last"
+	Status       = "status"
+	CurrencyPair = "currency_pair"
+	Currency     = "currency"
+	Available    = "available"
+	FilledTotal  = "filled_total"
+	Fee          = "fee"
+	UpdateTimeMs = "update_time_ms"
 )
 const (
 	Key         = "KEY"

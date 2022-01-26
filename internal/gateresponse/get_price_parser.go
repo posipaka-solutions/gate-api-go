@@ -29,5 +29,4 @@ func GetCurrentPriceParser(response *http.Response) (float64, error) {
 	}
 
 	return price, nil
-
 }
